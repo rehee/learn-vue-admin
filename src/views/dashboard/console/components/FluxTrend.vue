@@ -13,8 +13,8 @@
     setup() {
       const chartRef = ref<HTMLDivElement | null>(null);
       const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
-
-      onMounted(() => {
+      //mount 是一个函数. 似乎可以异步
+      const va = () => {
         setOptions({
           tooltip: {
             trigger: 'axis',
@@ -104,6 +104,11 @@
             },
           ],
         });
+      };
+      onMounted(()=>{
+        setTimeout(() => {
+          va()
+        }, 2000);
       });
       return { chartRef };
     },

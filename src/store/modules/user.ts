@@ -60,7 +60,9 @@ export const useUserStore = defineStore({
     // 登录
     async login(userInfo) {
       try {
+        console.log(login);
         const response = await login(userInfo);
+        console.log(response);
         const { result, code } = response;
         if (code === ResultEnum.SUCCESS) {
           const ex = 7 * 24 * 60 * 60 * 1000;

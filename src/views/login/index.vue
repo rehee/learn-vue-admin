@@ -4,9 +4,13 @@
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
-          <img src="~@/assets/images/account-logo.png" alt="" />
+          <p>logo here</p>
+          <!-- <img src="~@/assets/images/account-logo.png" alt="" /> -->
         </div>
-        <div class="view-account-top-desc">Naive Ui Admin中台前端/设计解决方案</div>
+        <div class="view-account-top-desc">
+          <p>title here</p>
+          <!-- <p>title here</p> -->
+        </div>
       </div>
       <div class="view-account-form">
         <n-form
@@ -85,123 +89,126 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
-  import { useUserStore } from '@/store/modules/user';
-  import { useMessage } from 'naive-ui';
-  import { ResultEnum } from '@/enums/httpEnum';
-  import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@vicons/ionicons5';
-  import { PageEnum } from '@/enums/pageEnum';
+import { reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useUserStore } from '@/store/modules/user';
+import { useMessage } from 'naive-ui';
+import { ResultEnum } from '@/enums/httpEnum';
+import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@vicons/ionicons5';
+import { PageEnum } from '@/enums/pageEnum';
 
-  interface FormState {
-    username: string;
-    password: string;
-  }
+interface FormState {
+  username: string;
+  password: string;
+}
 
-  const formRef = ref();
-  const message = useMessage();
-  const loading = ref(false);
-  const autoLogin = ref(true);
-  const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME;
+const formRef = ref();
+const message = useMessage();
+const loading = ref(false);
+const autoLogin = ref(true);
+const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME;
 
-  const formInline = reactive({
-    username: 'admin',
-    password: '123456',
-    isCaptcha: true,
-  });
+const formInline = reactive({
+  username: 'admin',
+  password: '123456',
+  isCaptcha: true,
+});
 
-  const rules = {
-    username: { required: true, message: '请输入用户名', trigger: 'blur' },
-    password: { required: true, message: '请输入密码', trigger: 'blur' },
-  };
+const rules = {
+  username: { required: true, message: '请输入用户名', trigger: 'blur' },
+  password: { required: true, message: '请输入密码', trigger: 'blur' },
+};
 
-  const userStore = useUserStore();
+const userStore = useUserStore();
 
-  const router = useRouter();
-  const route = useRoute();
+const router = useRouter();
+const route = useRoute();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    formRef.value.validate(async (errors) => {
-      if (!errors) {
-        const { username, password } = formInline;
-        message.loading('登录中...');
-        loading.value = true;
+const handleSubmit = (e) => {
+  e.preventDefault();
+  message.loading('login clicked');
+  
+  formRef.value.validate(async (errors) => {
+    if (!errors) {
+      const { username, password } = formInline;
+      message.loading('登录中...');
+      loading.value = true;
 
-        const params: FormState = {
-          username,
-          password,
-        };
+      const params: FormState = {
+        username,
+        password,
+      };
 
-        try {
-          const { code, message: msg } = await userStore.login(params);
-          message.destroyAll();
-          if (code == ResultEnum.SUCCESS) {
-            const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
-            message.success('登录成功，即将进入系统');
-            if (route.name === LOGIN_NAME) {
-              router.replace('/');
-            } else router.replace(toPath);
-          } else {
-            message.info(msg || '登录失败');
-          }
-        } finally {
-          loading.value = false;
+      try {
+        const { code, message: msg } = await userStore.login(params);
+        message.destroyAll();
+        return;
+        if (code == ResultEnum.SUCCESS) {
+          const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
+          message.success('登录成功，即将进入系统');
+          if (route.name === LOGIN_NAME) {
+            router.replace('/');
+          } else router.replace(toPath);
+        } else {
+          message.info(msg || '登录失败');
         }
-      } else {
-        message.error('请填写完整信息，并且进行验证码校验');
+      } finally {
+        loading.value = false;
       }
-    });
-  };
+    } else {
+      message.error('请填写完整信息，并且进行验证码校验');
+    }
+  });
+};
 </script>
 
 <style lang="less" scoped>
-  .view-account {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: auto;
+.view-account {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: auto;
 
-    &-container {
-      flex: 1;
-      padding: 32px 0;
-      width: 384px;
-      margin: 0 auto;
+  &-container {
+    flex: 1;
+    padding: 32px 0;
+    width: 384px;
+    margin: 0 auto;
+  }
+
+  &-top {
+    padding: 32px 0;
+    text-align: center;
+
+    &-desc {
+      font-size: 14px;
+      color: #808695;
     }
+  }
 
-    &-top {
-      padding: 32px 0;
-      text-align: center;
+  &-other {
+    width: 100%;
+  }
 
-      &-desc {
-        font-size: 14px;
-        color: #808695;
-      }
-    }
+  .default-color {
+    color: #515a6e;
 
-    &-other {
-      width: 100%;
-    }
-
-    .default-color {
+    .ant-checkbox-wrapper {
       color: #515a6e;
-
-      .ant-checkbox-wrapper {
-        color: #515a6e;
-      }
     }
   }
+}
 
-  @media (min-width: 768px) {
-    .view-account {
-      background-image: url('../../assets/images/login.svg');
-      background-repeat: no-repeat;
-      background-position: 50%;
-      background-size: 100%;
-    }
-
-    .page-account-container {
-      padding: 32px 0 24px 0;
-    }
+@media (min-width: 768px) {
+  .view-account {
+    background-image: url('../../assets/images/login.svg');
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: 100%;
   }
+
+  .page-account-container {
+    padding: 32px 0 24px 0;
+  }
+}
 </style>
