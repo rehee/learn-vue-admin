@@ -1,4 +1,5 @@
 import { http } from '@/utils/http/axios';
+import { DateItem } from 'naive-ui/lib/calendar/src/interface';
 
 export interface BasicResponseModel<T = any> {
   code: number;
@@ -10,6 +11,16 @@ export interface BasicPageParams {
   pageNumber: number;
   pageSize: number;
   total: number;
+}
+export interface UserTokenDTO {
+  tokenString: string;
+  expireUCTTime: DateItem;
+  userId: string;
+  userName: string;
+  avatar: string;
+  permissions: string[];
+  roles: [];
+  expireSecond: number;
 }
 
 /**
@@ -26,14 +37,14 @@ export function getUserInfo() {
  * @description: 用户登录
  */
 export function login(params) {
-  return http.request<BasicResponseModel>(
+  return http.request<BasicResponseModel<UserTokenDTO>>(
     {
-      url: '/Token/GetToken',
+      url: '/Token/Login',
       method: 'POST',
       params,
     },
     {
-      isTransformResponse: false,
+      isTransformResponse: true,
     }
   );
 }

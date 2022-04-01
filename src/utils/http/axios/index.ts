@@ -37,7 +37,7 @@ const transform: AxiosTransform = {
       isShowSuccessMessage,
       successMessageText,
       errorMessageText,
-      isTransformResponse,
+      isTransformResponse = true,
       isReturnNativeResponse,
     } = options;
 
@@ -51,7 +51,7 @@ const transform: AxiosTransform = {
       return res.data;
     }
 
-    const { data } = res;
+    const { data, status } = res;
 
     const $dialog = window['$dialog'];
     const $message = window['$message'];
@@ -61,9 +61,11 @@ const transform: AxiosTransform = {
       throw new Error('请求出错，请稍候重试');
     }
     //  这里 code，result，message为 后台统一的字段，需要修改为项目自己的接口返回格式
-    const { code, result, message } = data;
+    const code = status;
+    const result = data;
+    const message = "";
     // 请求成功
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
+    const hasSuccess = code === ResultEnum.SUCCESS;
     // 是否显示提示信息
     if (isShowMessage) {
       if (hasSuccess && (successMessageText || isShowSuccessMessage)) {
@@ -88,14 +90,18 @@ const transform: AxiosTransform = {
 
     // 接口请求成功，直接返回结果
     if (code === ResultEnum.SUCCESS) {
-      return result;
+      return {code,result,message};
     }
     // 接口请求错误，统一提示错误信息 这里逻辑可以根据项目进行修改
     let errorMsg = message;
     switch (code) {
       // 请求失败
       case ResultEnum.ERROR:
-        $message.error(errorMsg);
+        console.log(errorMsg);
+        if(errorMsg){
+          $message.error(errorMsg);
+        }
+        
         break;
       // 登录超时
       case ResultEnum.TIMEOUT:

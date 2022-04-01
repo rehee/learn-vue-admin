@@ -127,7 +127,7 @@ const route = useRoute();
 const handleSubmit = (e) => {
   e.preventDefault();
   message.loading('login clicked');
-  
+
   formRef.value.validate(async (errors) => {
     if (!errors) {
       const { username, password } = formInline;
@@ -152,11 +152,15 @@ const handleSubmit = (e) => {
         } else {
           message.info(msg || '登录失败');
         }
+      } catch (ex) {
+        console.log(ex);
+        message.info('登录失败');
+        message.error();
       } finally {
         loading.value = false;
       }
     } else {
-      message.error('请填写完整信息，并且进行验证码校验');
+      // message.error('111');
     }
   });
 };

@@ -1,8 +1,11 @@
 export function checkStatus(status: number, msg: string): void {
   const $message = window['$message'];
+  console.log('error captured');
   switch (status) {
     case 400:
-      $message.error(msg);
+      if(msg){
+        $message.error();
+      }
       break;
     // 401: 未登录
     // 未登录则跳转登录页面，并携带当前页面的路径
@@ -42,6 +45,8 @@ export function checkStatus(status: number, msg: string): void {
       $message.error('http版本不支持该请求!');
       break;
     default:
-      $message.error(msg);
+      if(msg){
+        $message.error();
+      }
   }
 }

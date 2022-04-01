@@ -65,11 +65,10 @@ export const useUserStore = defineStore({
         console.log(response);
         const { result, code } = response;
         if (code === ResultEnum.SUCCESS) {
-          const ex = 7 * 24 * 60 * 60 * 1000;
-          storage.set(ACCESS_TOKEN, result.token, ex);
-          storage.set(CURRENT_USER, result, ex);
+          storage.set(ACCESS_TOKEN, result.tokenString, result.expireSecond*1000);
+          storage.set(CURRENT_USER, result, result.expireSecond*1000);
           storage.set(IS_LOCKSCREEN, false);
-          this.setToken(result.token);
+          this.setToken(result.tokenString);
           this.setUserInfo(result);
         }
         return Promise.resolve(response);
