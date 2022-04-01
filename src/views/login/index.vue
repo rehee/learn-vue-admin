@@ -48,9 +48,9 @@
               <div class="flex-initial">
                 <n-checkbox v-model:checked="autoLogin">自动登录</n-checkbox>
               </div>
-              <div class="flex-initial order-last">
+              <!-- <div class="flex-initial order-last">
                 <a href="javascript:">忘记密码</a>
-              </div>
+              </div> -->
             </div>
           </n-form-item>
           <n-form-item>
@@ -58,7 +58,8 @@
               登录
             </n-button>
           </n-form-item>
-          <n-form-item class="default-color">
+          <!-- 其他登录方式 -->
+          <!-- <n-form-item class="default-color">
             <div class="flex view-account-other">
               <div class="flex-initial">
                 <span>其它登录方式</span>
@@ -81,7 +82,7 @@
                 <a href="javascript:">注册账号</a>
               </div>
             </div>
-          </n-form-item>
+          </n-form-item> -->
         </n-form>
       </div>
     </div>
@@ -89,7 +90,8 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+
+import { reactive, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/store/modules/user';
 import { useMessage } from 'naive-ui';
@@ -100,6 +102,7 @@ import { PageEnum } from '@/enums/pageEnum';
 interface FormState {
   username: string;
   password: string;
+  keepLogin?: boolean;
 }
 
 const formRef = ref();
@@ -109,8 +112,8 @@ const autoLogin = ref(true);
 const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME;
 
 const formInline = reactive({
-  username: 'admin',
-  password: '123456',
+  username: '',
+  password: '',
   isCaptcha: true,
 });
 
@@ -126,8 +129,6 @@ const route = useRoute();
 
 const handleSubmit = (e) => {
   e.preventDefault();
-  message.loading('login clicked');
-
   formRef.value.validate(async (errors) => {
     if (!errors) {
       const { username, password } = formInline;
@@ -135,14 +136,14 @@ const handleSubmit = (e) => {
       loading.value = true;
 
       const params: FormState = {
-        username,
-        password,
+        username: username,
+        password: password,
+        keepLogin: autoLogin.value,
       };
 
       try {
         const { code, message: msg } = await userStore.login(params);
         message.destroyAll();
-        return;
         if (code == ResultEnum.SUCCESS) {
           const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
           message.success('登录成功，即将进入系统');
@@ -150,12 +151,12 @@ const handleSubmit = (e) => {
             router.replace('/');
           } else router.replace(toPath);
         } else {
-          message.info(msg || '登录失败');
+          message.destroyAll();
+          message.info('登录失败');
         }
       } catch (ex) {
-        console.log(ex);
-        message.info('登录失败');
-        message.error();
+        message.destroyAll();
+        message.error('登录失败');
       } finally {
         loading.value = false;
       }
@@ -164,6 +165,9 @@ const handleSubmit = (e) => {
     }
   });
 };
+onMounted(() => {
+  console.log('loginpage mounted');
+});
 </script>
 
 <style lang="less" scoped>
