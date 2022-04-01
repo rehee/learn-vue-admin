@@ -13,7 +13,7 @@ export interface IUserState {
   username: string;
   welcome: string;
   avatar: string;
-  permissions: any[];
+  permissions: string[];
   info: any;
 }
 
@@ -37,7 +37,7 @@ export const useUserStore = defineStore({
     getNickname(): string {
       return this.username;
     },
-    getPermissions(): [any][] {
+    getPermissions(): string[] {
       return this.permissions;
     },
     getUserInfo(): object {
@@ -60,15 +60,15 @@ export const useUserStore = defineStore({
     // 登录
     async login(userInfo) {
       try {
-        console.log(login);
         const response = await login(userInfo);
-        console.log(response);
         const { result, code } = response;
         if (code === ResultEnum.SUCCESS) {
-          storage.set(ACCESS_TOKEN, result.tokenString, result.expireSecond*1000);
-          storage.set(CURRENT_USER, result, result.expireSecond*1000);
+          storage.set(ACCESS_TOKEN, result.tokenString, result.expireSecond);
+          storage.set(CURRENT_USER, result, result.expireSecond);
           storage.set(IS_LOCKSCREEN, false);
           this.setToken(result.tokenString);
+          this.setUserInfo(result);
+          this.setPermissions(result.permissions);
           this.setUserInfo(result);
         }
         return Promise.resolve(response);
@@ -79,24 +79,13 @@ export const useUserStore = defineStore({
 
     // 获取用户信息
     GetInfo() {
-      const that = this;
       return new Promise((resolve, reject) => {
-        getUserInfo()
-          .then((res) => {
-            const result = res;
-            if (result.permissions && result.permissions.length) {
-              const permissionsList = result.permissions;
-              that.setPermissions(permissionsList);
-              that.setUserInfo(result);
-            } else {
-              reject(new Error('getInfo: permissionsList must be a non-null array !'));
-            }
-            that.setAvatar(result.avatar);
-            resolve(res);
-          })
-          .catch((error) => {
-            reject(error);
-          });
+        const currentUser = storage.get(CURRENT_USER);
+        if(currentUser){
+          resolve(currentUser)
+        }else{
+          reject();
+        }
       });
     },
 

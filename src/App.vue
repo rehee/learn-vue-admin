@@ -25,6 +25,8 @@
   import { useRoute } from 'vue-router';
   import { useDesignSettingStore } from '@/store/modules/designSetting';
   import { lighten } from '@/utils/index';
+  import { createStorage,storage } from '@/utils/Storage';
+  import { ACCESS_TOKEN, CURRENT_USER, IS_LOCKSCREEN } from '@/store/mutation-types';
 
   const route = useRoute();
   const useLockscreen = useLockscreenStore();
@@ -66,18 +68,33 @@
       useLockscreen.setLockTime(lockTime.value - 1);
       if (lockTime.value <= 0) {
         // 设置锁屏
-        useLockscreen.setLock(true);
+        useLockscreen.setLock(ACCESS_TOKEN);
         return clearInterval(timer);
       }
     }, 1000);
   };
+  let keepLiveTimer;
+  const Storage = createStorage({ storage: localStorage });
+  const keepLive = (clear:boolean=false)=>{
+    clearInterval(keepLiveTimer);
+    if(clear){
+      return;
+    }
+    // keepLiveTimer = setInterval(() => {
+    //   console.log(
+    //     Storage.get(ACCESS_TOKEN)
+    //   );
+    // }, 1000);
+  };
 
   onMounted(() => {
     document.addEventListener('mousedown', timekeeping);
+    keepLive(false);
   });
 
   onUnmounted(() => {
     document.removeEventListener('mousedown', timekeeping);
+    keepLive(true);
   });
 </script>
 
