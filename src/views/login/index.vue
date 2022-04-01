@@ -4,11 +4,11 @@
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
-          <p>logo here</p>
+          <p>{{ $t('login.logo') }}</p>
           <!-- <img src="~@/assets/images/account-logo.png" alt="" /> -->
         </div>
         <div class="view-account-top-desc">
-          <p>title here</p>
+          <p>{{ $t('login.formTitle') }}</p>
           <!-- <p>title here</p> -->
         </div>
       </div>
@@ -21,7 +21,7 @@
           :rules="rules"
         >
           <n-form-item path="username">
-            <n-input v-model:value="formInline.username" placeholder="请输入用户名">
+            <n-input v-model:value="formInline.username" :placeholder="$t('login.forms.inputs.username.placeholder')">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <PersonOutline />
@@ -34,7 +34,7 @@
               v-model:value="formInline.password"
               type="password"
               showPasswordOn="click"
-              placeholder="请输入密码"
+              :placeholder="$t('login.forms.inputs.password.placeholder')"
             >
               <template #prefix>
                 <n-icon size="18" color="#808695">
@@ -46,16 +46,16 @@
           <n-form-item class="default-color">
             <div class="flex justify-between">
               <div class="flex-initial">
-                <n-checkbox v-model:checked="autoLogin">自动登录</n-checkbox>
+                <n-checkbox v-model:checked="autoLogin">{{$t('login.forms.inputs.autologin')}}</n-checkbox>
               </div>
               <!-- <div class="flex-initial order-last">
-                <a href="javascript:">忘记密码</a>
+                <a href="javascript:">{{$t('login.forms.inputs.forgotPassword')}}</a>
               </div> -->
             </div>
           </n-form-item>
           <n-form-item>
             <n-button type="primary" @click="handleSubmit" size="large" :loading="loading" block>
-              登录
+              {{$t('login.forms.inputs.loginBtn')}}
             </n-button>
           </n-form-item>
           <!-- 其他登录方式 -->
@@ -90,7 +90,8 @@
 </template>
 
 <script lang="ts" setup>
-
+// import { $t } from 'vue-i18n';
+import { AddLangMessage, Langs } from '@/utils/langs';
 import { reactive, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/store/modules/user';
@@ -98,14 +99,18 @@ import { useMessage } from 'naive-ui';
 import { ResultEnum } from '@/enums/httpEnum';
 import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@vicons/ionicons5';
 import { PageEnum } from '@/enums/pageEnum';
-
+// import {$t} from '@/main';
 interface FormState {
   username: string;
   password: string;
   keepLogin?: boolean;
 }
 
+// console.log(App);
+// console.log($t('message.hello'))
 const formRef = ref();
+
+
 const message = useMessage();
 const loading = ref(false);
 const autoLogin = ref(true);
@@ -118,7 +123,7 @@ const formInline = reactive({
 });
 
 const rules = {
-  username: { required: true, message: '请输入用户名', trigger: 'blur' },
+  username: { required: true, message: Langs.t('message.hello'), trigger: 'blur' },
   password: { required: true, message: '请输入密码', trigger: 'blur' },
 };
 

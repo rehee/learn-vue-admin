@@ -1,3 +1,4 @@
+import { AddLangs } from '@/utils/langs';
 import './styles/tailwind.css';
 import { createApp } from 'vue';
 import App from './App.vue';
@@ -5,14 +6,18 @@ import router, { setupRouter } from './router';
 import { setupStore } from '@/store';
 import { setupNaive, setupDirectives } from '@/plugins';
 import { AppProvider } from '@/components/Application';
+// import yml from '@/langs/l.yml';
+
+
 
 async function bootstrap() {
   const appProvider = createApp(AppProvider);
-
+  // console.log(yml);
   const app = createApp(App);
-
+  AddLangs(app);
   // 注册全局常用的 naive-ui 组件
   setupNaive(app);
+
 
   // 注册全局自定义组件
   //setupCustomComponents();
@@ -36,6 +41,7 @@ async function bootstrap() {
   await router.isReady();
 
   app.mount('#app', true);
+
 }
 
 void bootstrap();

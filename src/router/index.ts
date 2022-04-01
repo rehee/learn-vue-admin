@@ -32,7 +32,10 @@ export const RootRoute: RouteRecordRaw = {
 export const LoginRoute: RouteRecordRaw = {
   path: '/login',
   name: 'Login',
-  component: () => import('@/views/login/index.vue'),
+  component: () => {
+    console.log(window)
+    return import('@/views/login/index.vue');
+  },
   meta: {
     title: '登录',
   },
@@ -52,6 +55,7 @@ const router = createRouter({
 });
 
 export function setupRouter(app: App) {
+  console.log('create router')
   app.use(router);
   // 创建路由守卫
   createRouterGuards(router);

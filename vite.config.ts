@@ -17,11 +17,14 @@ const __APP_INFO__ = {
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir);
 }
-
+let envs: Record<string, string>;
 export default ({ command, mode }: ConfigEnv): UserConfig => {
   const root = process.cwd();
   const env = loadEnv(mode, root);
+  envs = env;
   const viteEnv = wrapperEnv(env);
+
+  console.log('event', viteEnv)
   const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_GLOB_PROD_MOCK, VITE_PROXY } =
     viteEnv;
   const prodMock = VITE_GLOB_PROD_MOCK;

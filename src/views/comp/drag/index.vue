@@ -114,7 +114,7 @@
           >
             <template #item="{ element }">
               <div class="cursor-move draggable-li">
-                <n-tag type="success">已验收</n-tag><span class="ml-2">{{ element.name }}</span>
+                <n-tag type="success">{{$t('message.hello')}}</n-tag><span class="ml-2">{{ element.name }}</span>
               </div>
             </template>
           </Draggable>
