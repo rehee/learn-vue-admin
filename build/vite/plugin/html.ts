@@ -17,24 +17,25 @@ export function configHtmlPlugin(env: ViteEnv, isBuild: boolean) {
   const getAppConfigSrc = () => {
     return `${path || '/'}${GLOB_CONFIG_FILE_NAME}?v=${pkg.version}-${new Date().getTime()}`;
   };
-
+  console.log('app configration src', getAppConfigSrc());
   const htmlPlugin: Plugin[] = html({
     minify: isBuild,
     inject: {
       // Inject data into ejs template
       injectData: {
         title: VITE_GLOB_APP_TITLE,
+        aa: "a",
       },
       // Embed the generated app.config.js file
       tags: isBuild
         ? [
-            {
-              tag: 'script',
-              attrs: {
-                src: getAppConfigSrc(),
-              },
+          {
+            tag: 'script',
+            attrs: {
+              src: getAppConfigSrc(),
             },
-          ]
+          },
+        ]
         : [],
     },
   });

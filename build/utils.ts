@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-
+import yaml from 'js-yaml';
+import { RevertObj, addAndUpdateMessage, AddLangMessage } from '../src/utils/langs/LangObjConvert';
 export function isDevFn(mode: string): boolean {
   return mode === 'development';
 }
@@ -31,11 +32,25 @@ export function wrapperEnv(envConf: Recordable): ViteEnv {
     if (envName === 'VITE_PROXY') {
       try {
         realName = JSON.parse(realName);
-      } catch (error) {}
+      } catch (error) { }
     }
     ret[envName] = realName;
-    process.env[envName] = realName;
   }
+
+
+  const ymlFile = yaml.load(fs.readFileSync(path.resolve(process.cwd(), './locals.yml')));
+  const arr = ymlFile as string[];
+  let langObj = {};
+  arr.forEach((f) => {
+    const localfile = yaml.load(fs.readFileSync(path.resolve(process.cwd(), f)));
+    let obj = {}
+    RevertObj(localfile, obj);
+    addAndUpdateMessage(langObj, obj);
+    AddLangMessage(localfile);
+  });
+  ret['Local'] = JSON.stringify(langObj);
+  envConf['Local'] = langObj;
+
   return ret;
 }
 
@@ -50,7 +65,7 @@ export function getEnvConfig(match = 'VITE_GLOB_', confFiles = ['.env', '.env.pr
     try {
       const env = dotenv.parse(fs.readFileSync(path.resolve(process.cwd(), item)));
       envConfig = { ...envConfig, ...env };
-    } catch (error) {}
+    } catch (error) { }
   });
 
   Object.keys(envConfig).forEach((key) => {
@@ -59,6 +74,9 @@ export function getEnvConfig(match = 'VITE_GLOB_', confFiles = ['.env', '.env.pr
       Reflect.deleteProperty(envConfig, key);
     }
   });
+  
+  envConfig['Locals'] = "local";
+  
   return envConfig;
 }
 

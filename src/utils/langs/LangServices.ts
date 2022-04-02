@@ -13,7 +13,6 @@ function getLangs(local?: string, fallbackLocal?: string): I18n<{}, unknown, unk
         });
 
         AddLangMessage(global);
-        console.log('global', global, 'message', Messages)
     }
     return i18n;
 }

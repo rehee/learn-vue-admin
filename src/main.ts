@@ -7,7 +7,7 @@ import { setupStore } from '@/store';
 import { setupNaive, setupDirectives } from '@/plugins';
 import { AppProvider } from '@/components/Application';
 // import yml from '@/langs/l.yml';
-
+import { useGlobSetting } from '@/hooks/setting';
 
 
 async function bootstrap() {
@@ -17,7 +17,7 @@ async function bootstrap() {
   AddLangs(app);
   // 注册全局常用的 naive-ui 组件
   setupNaive(app);
-
+  console.log("init", useGlobSetting().locals);
 
   // 注册全局自定义组件
   //setupCustomComponents();

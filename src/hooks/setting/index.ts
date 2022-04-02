@@ -12,6 +12,7 @@ export const useGlobSetting = (): Readonly<GlobConfig> => {
     VITE_GLOB_UPLOAD_URL,
     VITE_GLOB_PROD_MOCK,
     VITE_GLOB_IMG_URL,
+    Locals
   } = getAppEnvConfig();
 
   if (!/[a-zA-Z\_]*/.test(VITE_GLOB_APP_SHORT_NAME)) {
@@ -29,6 +30,7 @@ export const useGlobSetting = (): Readonly<GlobConfig> => {
     uploadUrl: VITE_GLOB_UPLOAD_URL,
     prodMock: VITE_GLOB_PROD_MOCK,
     imgUrl: VITE_GLOB_IMG_URL,
+    locals: Locals,
   };
   return glob as Readonly<GlobConfig>;
 };

@@ -55,7 +55,7 @@
           </n-form-item>
           <n-form-item>
             <n-button type="primary" @click="handleSubmit" size="large" :loading="loading" block>
-              {{$t('login.forms.inputs.loginBtn')}}
+              {{$t('login.forms.inputs.loginBtn')}} {{$t('global.title')}}
             </n-button>
           </n-form-item>
           <!-- 其他登录方式 -->
@@ -106,8 +106,6 @@ interface FormState {
   keepLogin?: boolean;
 }
 
-// console.log(App);
-// console.log($t('message.hello'))
 const formRef = ref();
 
 
@@ -171,7 +169,7 @@ const handleSubmit = (e) => {
   });
 };
 onMounted(() => {
-  console.log('loginpage mounted');
+  // console.log('loginpage mounted');
 });
 </script>
 

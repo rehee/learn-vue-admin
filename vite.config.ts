@@ -22,11 +22,13 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const root = process.cwd();
   const env = loadEnv(mode, root);
   envs = env;
-  const viteEnv = wrapperEnv(env);
 
-  console.log('event', viteEnv)
-  const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_GLOB_PROD_MOCK, VITE_PROXY } =
+  const viteEnv = wrapperEnv(env);
+  __APP_INFO__['Locals'] = viteEnv.Local;
+
+  const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_GLOB_PROD_MOCK, VITE_PROXY, Local } =
     viteEnv;
+  envs['Local'] = JSON.stringify(Local);
   const prodMock = VITE_GLOB_PROD_MOCK;
   const isBuild = command === 'build';
   return {

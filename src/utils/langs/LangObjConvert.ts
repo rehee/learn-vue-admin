@@ -11,7 +11,7 @@ const setValue = (input: object, value: string, keys: string[]) => {
 	}
 	setValue(input[<string>v], value, keys);
 }
-function RevertObj(input: object, output: object, parent?: string[]) {
+export function RevertObj(input: object, output: object, parent?: string[]) {
 	let parentList = parent == null ? [] : parent.map(b => b);
 	for (var p in input) {
 		if (input.hasOwnProperty(p)) {
@@ -39,7 +39,7 @@ function copy(target: object): object {
 	return JSON.parse(JSON.stringify(target));
 }
 
-function addAndUpdateMessage(target: object, source: object) {
+export function addAndUpdateMessage(target: object, source: object) {
 
 	for (var key in source) {
 		if (source.hasOwnProperty(key)) {
@@ -68,7 +68,6 @@ function addAndUpdateMessage(target: object, source: object) {
 export function AddLangMessage(input: object) {
 	const result = {};
 	RevertObj(input, result);
-	console.log('revert', input, result);
 	addAndUpdateMessage(Messages, result);
 }
 
