@@ -63,3 +63,10 @@ export interface Result<T = any> {
   message: string;
   result?: T;
 }
+
+export enum HttpMethod{
+  Get = 1,
+  Post = 2,
+  Put = 3,
+  Delete = 4,
+}

@@ -75,6 +75,7 @@ export class VAxios {
           const isCancel = axios.isCancel(res);
           if (transformRequestData && isFunction(transformRequestData) && !isCancel) {
             try {
+              console.log(res);
               const ret = transformRequestData(res, opt);
               resolve(ret);
             } catch (err) {

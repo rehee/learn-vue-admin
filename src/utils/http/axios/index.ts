@@ -22,7 +22,7 @@ const urlPrefix = globSetting.urlPrefix || '';
 
 import router from '@/router';
 import { storage } from '@/utils/Storage';
-
+import exp from 'constants';
 /**
  * @description: 数据处理，方便区分多种处理方式
  */
@@ -83,14 +83,14 @@ const transform: AxiosTransform = {
           title: '提示',
           content: message,
           positiveText: '确定',
-          onPositiveClick: () => {},
+          onPositiveClick: () => { },
         });
       }
     }
 
     // 接口请求成功，直接返回结果
     if (code === ResultEnum.SUCCESS) {
-      return {code,result,message};
+      return { code, result, message };
     }
     // 接口请求错误，统一提示错误信息 这里逻辑可以根据项目进行修改
     let errorMsg = message;
@@ -98,10 +98,10 @@ const transform: AxiosTransform = {
       // 请求失败
       case ResultEnum.ERROR:
         console.log(errorMsg);
-        if(errorMsg){
+        if (errorMsg) {
           $message.error(errorMsg);
         }
-        
+
         break;
       // 登录超时
       case ResultEnum.TIMEOUT:
@@ -121,7 +121,7 @@ const transform: AxiosTransform = {
             storage.clear();
             window.location.href = LoginPath;
           },
-          onNegativeClick: () => {},
+          onNegativeClick: () => { },
         });
         break;
     }
@@ -217,8 +217,8 @@ const transform: AxiosTransform = {
           //negativeText: '取消',
           closable: false,
           maskClosable: false,
-          onPositiveClick: () => {},
-          onNegativeClick: () => {},
+          onPositiveClick: () => { },
+          onNegativeClick: () => { },
         });
         return Promise.reject(error);
       }
@@ -291,3 +291,6 @@ export const http = createAxios();
 //     urlPrefix: 'api',
 //   },
 // });
+
+
+
