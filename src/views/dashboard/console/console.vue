@@ -228,6 +228,7 @@
   import { getConsoleInfo } from '@/api/dashboard/console';
   import VisiTab from './components/VisiTab.vue';
   import { CountTo } from '@/components/CountTo/index';
+  
   import {
     CaretUpOutlined,
     CaretDownOutlined,
@@ -325,6 +326,7 @@
 
   onMounted(async () => {
     const { visits, saleroom, orderLarge, volume } = await getConsoleInfo();
+    
     visits.value = visits;
     saleroom.value = saleroom;
     orderLarge.value = orderLarge;

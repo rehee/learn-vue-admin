@@ -39,7 +39,7 @@ export function getUserInfo() {
 export function login(params) {
   return http.request<BasicResponseModel<UserTokenDTO>>(
     {
-      url: '/Token/Login',
+      url: '/Api/Token/Login',
       method: 'POST',
       params,
     },

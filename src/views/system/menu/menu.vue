@@ -131,7 +131,8 @@
   import { getMenuList } from '@/api/system/menu';
   import { getTreeItem } from '@/utils';
   import CreateDrawer from './CreateDrawer.vue';
-
+  import { http } from '@/utils/http/axios';
+  
   const rules = {
     label: {
       required: true,
@@ -236,7 +237,18 @@
   }
 
   onMounted(async () => {
+    console.log(http);
+    http.request<BasicResponseModel<any>>({
+      url: '/Api/EntityGridService/Entity1/1/10',
+      method: 'GET',
+    }).then(b=>{
+      console.log(b);
+    }).catch(ex=>console.log(ex))
+
     const treeMenuList = await getMenuList();
+    
+    
+
     const keys = treeMenuList.list.map((item) => item.key);
     Object.assign(formParams, keys);
     treeData.value = treeMenuList.list;

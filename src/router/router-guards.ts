@@ -15,6 +15,8 @@ export function createRouterGuards(router: Router) {
   const userStore = useUserStoreWidthOut();
   const asyncRouteStore = useAsyncRouteStoreWidthOut();
   router.beforeEach(async (to, from, next) => {
+    console.log('from',to);
+    console.log('to', from);
     const Loading = window['$loading'] || null;
     Loading && Loading.start();
     if (from.path === LOGIN_PATH && to.name === 'errorPage') {

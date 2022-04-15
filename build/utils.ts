@@ -38,6 +38,15 @@ export function wrapperEnv(envConf: Recordable): ViteEnv {
   }
 
 
+  
+  ret['Local'] = loadLocalFiles();
+  envConf['Local'] = loadLocalFiles();
+
+  return ret;
+}
+
+const loadLocalFiles:()=>string = 
+()=>{
   const ymlFile = yaml.load(fs.readFileSync(path.resolve(process.cwd(), './locals.yml')));
   const arr = ymlFile as string[];
   let langObj = {};
@@ -48,10 +57,7 @@ export function wrapperEnv(envConf: Recordable): ViteEnv {
     addAndUpdateMessage(langObj, obj);
     AddLangMessage(localfile);
   });
-  ret['Local'] = JSON.stringify(langObj);
-  envConf['Local'] = langObj;
-
-  return ret;
+  return JSON.stringify(langObj);
 }
 
 /**
@@ -74,9 +80,9 @@ export function getEnvConfig(match = 'VITE_GLOB_', confFiles = ['.env', '.env.pr
       Reflect.deleteProperty(envConfig, key);
     }
   });
-  
-  envConfig['Locals'] = "local";
-  
+
+  envConfig['Locals'] = loadLocalFiles();
+
   return envConfig;
 }
 
